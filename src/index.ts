@@ -104,6 +104,23 @@ client.on('interactionCreate', (interaction: DiscordInteraction) => {
                 return;
             }
 
+            /**
+                Suggestion:
+                    Add a guard clause for trying to target the app itself when using the `vs` argument in the slash commands.
+                    
+                    The bot has its own AI setup for various games, but people can still try to use the `vs` system to play against
+                    the bot. Which, as you know will not work. They then complain it doesnt work...
+                    
+                    NOTE: Not sure if DiscordMinimal provides a way to get apps own user Id, so made a const for it below.
+            */
+            const selfId: Snowflake = '746827767819010218';
+            if (player2?.id) {
+                const resp = new DiscordInteractionResponseMessageData();
+                resp.content = 'This application is not programmed to respond to the targetted multiplayer system!';
+                interaction.respond(resp).catch(console.log);
+                return;
+            }
+
             if (!playerGameMap.has(guildId))
                 playerGameMap.set(guildId, new Map<Snowflake, GameBase>());
 
